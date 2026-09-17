@@ -2,7 +2,7 @@ import mysql.connector as mydbconnection
 from mysql.connector import Error
 
 
-def connect():
+def insert_record(record_id, name, price, purchase_date):
     conn = None
 
     try:
@@ -17,20 +17,20 @@ def connect():
 
         # Creates a cursor object that allows SQL actions to the MySQL server engine
         cursor = conn.cursor()
-
-        # Create a SQL Query we want to run
+        # Create a SQL Query we want to run, using parameterized values
         query = '''
-            CREATE TABLE laptop (
-                ID int(11) NOT NULL,
-                Name varchar(250) NOT NULL,
-                Price float NOT NULL,
-                Purchase_date date NOT NULL
-            )
+            INSERT INTO laptop (Id, Name, Price, Purchase_date)
+            VALUES (%s, %s, %s, %s)
         '''
 
-        cursor.execute(query)
+        # Executes query in SQL engine/server
+        cursor.execute(query, (record_id, name, price, purchase_date))
+        print('✅ Query Executed.')
 
-        print('✅ Created Table')
+        conn.commit()
+        print('✅ Transaction Commited.')
+
+        print(f'✅ {cursor.rowcount}: Record inserted successfully.')
 
     except Error as e:
         print(f'❌ Error: {e}')
@@ -40,7 +40,6 @@ def connect():
             conn.close()
             print('🛑 Connection Closed')
 
-
-
-if __name__ == "__main__":
-    connect()
+insert_record(1, 'Mac Book Pro', 3000, '2026-09-17')
+insert_record(12, 'Lenovo Think Pad', 1400, '2026-09-16')
+insert_record(9, 'Alienware', 5000, '2026-08-17')

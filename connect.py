@@ -9,7 +9,7 @@ def connect():
         conn = mydbconnection.connect(
             database='classicmodels',
             user='root',
-            password='Jerrell46!'
+            password='password'
         )
 
 
